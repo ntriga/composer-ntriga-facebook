@@ -1,6 +1,6 @@
 {
-    "name": "ntriga/whise",
-    "description": "Whise module",
+    "name": "ntriga/instagram",
+    "description": "Instagram module",
     "type": "package",
     "require": {
     },

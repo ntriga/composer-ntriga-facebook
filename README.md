@@ -9,7 +9,7 @@
 	"repositories": [
 		{
 			"type": "git",
-			"url": "https://dspventures@bitbucket.org/dspdevteam/composer-ntriga-whise.git"
+			"url": "https://dspventures@bitbucket.org/dspdevteam/composer-ntriga-instagram.git"
 		}
 	]
 }
@@ -18,34 +18,18 @@
 ### Require package ###
 
 ```
-composer require ntriga/whise:dev-master
+composer require ntriga/instagram:dev-master
 ```
 
 ## PHP ##
 
-
-### Get Whise instance ###
+### Show login ###
 
 ```php
-use Ntriga\Whise;
+use Ntriga\Instagram;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$extra_options = [
-	'groupID' => 'group/website',
-	'endpoint' => 'endpoint'
-];
-
-$cb = new Whise('apikey', 'portal', $extra_options);
-```
-
-### Get hotels ###
-
-```php
-use Ntriga\Whise;
-
-require __DIR__ . '/../vendor/autoload.php';
-
-$cb = new Whise('apikey', 'portal', $extra_options);
-$hotels = $cb->find();
+$insta = new Instagram();
+$insta->showLogin();
 ```
