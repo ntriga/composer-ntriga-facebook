@@ -5,6 +5,4 @@
 
 	$insta = new Instagram();
 	$insta->showLogin();
-
-	echo 'test';
 ?>

@@ -15,6 +15,10 @@
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
       // Logged into your app and Facebook.
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", '[[response_post_url]]', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.send(JSON.stringify(response));
       testAPI();
     } else {
       // The person is not logged into your app or we are unable to tell.
@@ -86,7 +90,7 @@
   the FB.login() function when clicked.
 -->
 
-<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+<fb:login-button scope="instagram_basic" onlogin="checkLoginState();">
 </fb:login-button>
 
 <div id="status">
