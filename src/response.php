@@ -1,7 +1,10 @@
 <?php
-	$request_body = file_get_contents('php://input');
-	$response = json_decode($request_body);
-	if (isset($response->authResponse)) {
-		file_put_contents(__DIR__.'/../settings/facebook_key.json', json_encode($response->authResponse));
-	}
+	use Ntriga\Instagram;
+	require_once(__DIR__.'/Instagram.php');
+
+	$insta = new Instagram();
+	$insta->savePermanentToken($_POST['fb_account'], $_POST['accesstoken']);
+
+	header('Location: '.$_POST['redirect']);
+	die();
 ?>

@@ -1,29 +1,78 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Facebook Login</title>
+  <title>Instagram koppeling</title>
+  <link href="https://fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <script
+        src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+        <style type="text/css">
+          body{
+            background: #fafafa;
+          }
+          .app-content{
+            padding: 40px;
+            background: #ffffff;
+            border: 1px solid rgba(0,0,0,.0975);
+          }
+
+          .app-header{
+            padding: 10px 0;
+            background: #ffffff;
+            border-bottom: 1px solid rgba(0,0,0,.0975);
+            font-family: 'Oleo Script', cursive;
+          }
+
+          .btn.btn-primary{
+            background-color: #3897f0;
+          }
+        </style>
 </head>
 <body>
 <script>
   // This is called with the results from from FB.getLoginStatus().
   function statusChangeCallback(response) {
-    console.log('statusChangeCallback');
-    console.log(response);
+    /*FB.logout(function(response) {
+    });*/
     // The response object is returned with a status field that lets the
     // app know the current login status of the person.
     // Full docs on the response object can be found in the documentation
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
-      // Logged into your app and Facebook.
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", '[[response_post_url]]', true);
-      xhr.setRequestHeader('Content-Type', 'application/json');
-      xhr.send(JSON.stringify(response));
-      testAPI();
-    } else {
-      // The person is not logged into your app or we are unable to tell.
-      document.getElementById('status').innerHTML = 'Please log ' +
-        'into this app.';
+      $('[name="accesstoken"]').val(response.authResponse.accessToken);
+      $('#fb_login').hide();
+
+      FB.api('/me/accounts', function(response) {
+        $('#choose_account').show();
+        add_accounts(response);
+      });
+    }
+  }
+
+  function add_accounts(response){
+    //Adding pages to array
+    $(response.data).each(function(i, el){
+        $('#fb_accounts').append('<option value="'+el.id+'">'+el.name+'</option>');
+    });
+
+    //Order the options
+    var options = $('#fb_accounts option');
+    var arr = options.map(function(_, o) { return { t: $(o).text(), v: o.value }; }).get();
+    arr.sort(function(o1, o2) { return o1.t > o2.t ? 1 : o1.t < o2.t ? -1 : 0; });
+    options.each(function(i, o) {
+      o.value = arr[i].v;
+      $(o).text(arr[i].t);
+    });
+
+    //Getting next page
+    if (response.paging.next) {
+      $.get(response.paging.next, function(response){
+        add_accounts(response);
+      });
     }
   }
 
@@ -71,17 +120,6 @@
     js.src = "https://connect.facebook.net/en_US/sdk.js";
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
-
-  // Here we run a very simple test of the Graph API after login is
-  // successful.  See statusChangeCallback() for when this call is made.
-  function testAPI() {
-    console.log('Welcome!  Fetching your information.... ');
-    FB.api('/me', function(response) {
-      console.log('Successful login for: ' + response.name);
-      document.getElementById('status').innerHTML =
-        'Thanks for logging in, ' + response.name + '!';
-    });
-  }
 </script>
 
 <!--
@@ -89,11 +127,38 @@
   the JavaScript SDK to present a graphical Login button that triggers
   the FB.login() function when clicked.
 -->
-
-<fb:login-button scope="instagram_basic" onlogin="checkLoginState();">
+<header class="app-header mb-3">
+    <div class="container">
+      <h2><i class="fab fa-instagram"></i> Instagram koppeling</h2>
+    </div>
+      </header>
+<div class="container">
+  <div class="row justify-content-md-center mt-5">
+  <div class="col-12 col-md-6">
+    <div class="app">
+      <section class="app-content">
+<div id="fb_login">
+  <h2>Login to facebook</h2>
+  <fb:login-button scope="instagram_basic, manage_pages" onlogin="checkLoginState();">
 </fb:login-button>
+</div>
 
-<div id="status">
+<div id="choose_account" style="display:none;">
+  <h2>Kies uw pagina</h2>
+  <form method="post" action="[[response_post_url]]">
+    <input type="hidden" name="accesstoken" value="">
+    <input type="hidden" name="redirect" value="[[response_redirect_url]]">
+    <div class="form-group">
+      <select class="form-control" id="fb_accounts" name="fb_account"></select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Koppelen</button>
+  </form>
+</div>
+</section>
+</div>
+</div>
+</div>
 </div>
 
 </body>

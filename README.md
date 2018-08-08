@@ -23,13 +23,21 @@ composer require ntriga/instagram:dev-master
 
 ## PHP ##
 
-### Show login ###
+### Getting posts ###
 
 ```php
 use Ntriga\Instagram;
 
-require __DIR__ . '/../vendor/autoload.php';
+require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php');
 
 $insta = new Instagram();
-$insta->showLogin();
+if ($insta->checkPageKey()) {
+	$posts = $insta->getPosts();
+
+	foreach ($posts->data as $post) {
+		//Saving post to DB
+	}
+}else{
+	$insta->showLogin();
+}
 ```
