@@ -9,10 +9,12 @@ class Instagram
 	private $response_url = '';
 	private $page_key_file = __DIR__.'/../settings/facebook_page_key.json';
 
-	private $app_id = 213575729318742;
-	private $app_secret = 'a611ecce8716dd5e1d2d8cad2480a154';
+	private $app_id = 0;
+	private $app_secret = '';
 
-	function __construct(){
+	function __construct($app_id = 213575729318742, $app_secret = 'a611ecce8716dd5e1d2d8cad2480a154'){
+		$this->app_id = $app_id;
+		$this->app_secret = $app_secret;
 		$this->response_url = str_replace($_SERVER['DOCUMENT_ROOT'], '', __DIR__).'/response.php';
 	}
 
