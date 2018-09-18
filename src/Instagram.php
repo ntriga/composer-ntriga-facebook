@@ -2,8 +2,6 @@
 
 namespace Ntriga;
 
-//require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/autoload.php';
-
 class Instagram
 {
 	private $response_url = '';
@@ -20,7 +18,7 @@ class Instagram
 
 	public function showLogin(){
 		$login_html = file_get_contents(__DIR__.'/facebook_login.html');
-		echo str_replace('[[response_post_url]]', $this->response_url , str_replace('[[response_redirect_url]]', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]", $login_html) );
+		echo str_replace('[[app_id]]', $this->app_id, str_replace('[[response_post_url]]', $this->response_url , str_replace('[[response_redirect_url]]', (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]", $login_html) ));
 	}
 
 	public function checkPageKey(){
