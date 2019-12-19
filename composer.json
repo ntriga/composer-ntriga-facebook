@@ -1,10 +1,7 @@
 {
-    "name": "ntriga/instagram",
-    "description": "Instagram module",
+    "name": "ntriga/facebook",
+    "description": "Facebook module",
     "type": "package",
-    "require": {
-        "facebook/graph-sdk": "^5.6"
-    },
     "license": "MIT",
     "authors": [
         {

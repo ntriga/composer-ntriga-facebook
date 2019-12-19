@@ -12,10 +12,14 @@ class Facebook
 
 	private $api_url = 'https://graph.facebook.com/v5.0/';
 
+	private $settings = null;
+
 	function __construct($app_id = null, $app_secret = null){
 		$this->app_id = $app_id;
 		$this->app_secret = $app_secret;
-		$this->response_url = str_replace($_SERVER['DOCUMENT_ROOT'], '', __DIR__).'/response.php?platform=facebook&app_id='.$app_id.'&app_secret='.$app_secret;
+		$this->response_url = str_replace($_SERVER['DOCUMENT_ROOT'], '', __DIR__).'/response.php?app_id='.$app_id.'&app_secret='.$app_secret;
+
+		$this->settings = $this->get_settings();
 	}
 
 	public function showLogin(){
@@ -39,18 +43,53 @@ class Facebook
 		return json_decode(file_get_contents($this->api_url.$page_id.'?fields=access_token&access_token='.$token));
 	}
 
+	public function getBusinessId($page_id, $token){
+		return json_decode(file_get_contents($this->api_url.$page_id.'?fields=instagram_business_account&access_token='.$token));
+	}
+
 	public function savePermanentToken($page_id, $user_token){
 		$long_token = $this->getLongLivedToken($user_token);
 		$permanent_token = $this->getPermanentToken($page_id, $long_token->access_token);
+		$business = $this->getBusinessId($page_id, $permanent_token->access_token);
 
-		file_put_contents($this->page_key_file, json_encode(['access_token' => $permanent_token->access_token, 'page_id' => $page_id]));
+		file_put_contents($this->page_key_file, json_encode(['instagram_business_id' => $business->instagram_business_account->id, 'access_token' => $permanent_token->access_token, 'page_id' => $page_id]));
 
 		return true;
 	}
 
-	public function getPosts(){
-		$settings = json_decode(file_get_contents($this->page_key_file));
-		return json_decode(file_get_contents($this->api_url.$settings->page_id.'/feed?fields=full_picture,created_time,id,message,permalink_url&limit=50&access_token='.$settings->access_token));
+	public function getFeed(){
+		return $this->request('feed', [
+			'fields' => 'full_picture,created_time,id,message,permalink_url',
+			'limit' => 50
+		]);
+	}
+
+	public function getInstagramFeed(){
+		return $this->request_instagram('media', [
+			'fields' => 'media_url,caption,comments_count,like_count,media_type,thumbnail_url,timestamp,comments,permalink',
+			'limit' => 50
+		]);
+	}
+
+	private function get_settings(){
+		if ($this->checkPageKey()) {
+			return json_decode(file_get_contents($this->page_key_file));
+		}
+
+		return null;
+	}
+
+	private function request($endpoint, $data){
+		return $this->do_request($this->api_url.$this->settings->page_id, $endpoint $data);
+	}
+
+	private function request_instagram($endpoint, $data){
+		return $this->do_request($this->api_url.$this->settings->instagram_business_id, $endpoint $data);
+	}
+
+	private function do_request($url, $endpoint, $data = array()){
+		$data['access_token'] = $this->settings->access_token;
+		return json_decode(file_get_contents($url.'/'.$endpoint'?'.http_build_query($data)));
 	}
 
 }

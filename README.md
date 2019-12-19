@@ -23,21 +23,28 @@ composer require ntriga/instagram:dev-master
 
 ## PHP ##
 
-### Getting posts ###
+### Getting posts Facebook ###
 
 ```php
-use Ntriga\Instagram;
+use Ntriga\Facebook;
 
 require_once($_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php');
 
-$insta = new Instagram();
-if ($insta->checkPageKey()) {
-	$posts = $insta->getPosts();
+$fb = new Facebook('app_id', 'app_secret');
+if ($fb->checkPageKey()) {
 
-	foreach ($posts->data as $post) {
+	$feed = $fb->getFeed();
+
+	foreach ($feed->data as $post) {
+		//Saving post to DB
+	}
+
+	$instagram_feed = $fb->getInstagramFeed();
+
+	foreach ($instagram_feed->data as $post) {
 		//Saving post to DB
 	}
 }else{
-	$insta->showLogin();
+	$fb->showLogin();
 }
 ```
