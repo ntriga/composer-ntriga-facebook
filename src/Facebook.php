@@ -80,16 +80,16 @@ class Facebook
 	}
 
 	private function request($endpoint, $data){
-		return $this->do_request($this->api_url.$this->settings->page_id, $endpoint $data);
+		return $this->do_request($this->api_url.$this->settings->page_id, $endpoint, $data);
 	}
 
 	private function request_instagram($endpoint, $data){
-		return $this->do_request($this->api_url.$this->settings->instagram_business_id, $endpoint $data);
+		return $this->do_request($this->api_url.$this->settings->instagram_business_id, $endpoint, $data);
 	}
 
 	private function do_request($url, $endpoint, $data = array()){
 		$data['access_token'] = $this->settings->access_token;
-		return json_decode(file_get_contents($url.'/'.$endpoint'?'.http_build_query($data)));
+		return json_decode(file_get_contents($url.'/'.$endpoint.'?'.http_build_query($data)));
 	}
 
 }
