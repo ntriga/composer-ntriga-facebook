@@ -9,7 +9,7 @@
 	"repositories": [
 		{
 			"type": "git",
-			"url": "https://dspventures@bitbucket.org/dspdevteam/composer-ntriga-instagram.git"
+			"url": "https://dspventures@bitbucket.org/dspdevteam/composer-ntriga-facebook.git"
 		}
 	]
 }
@@ -18,7 +18,7 @@
 ### Require package ###
 
 ```
-composer require ntriga/instagram:dev-master
+composer require ntriga/facebook:dev-master
 ```
 
 ## PHP ##
