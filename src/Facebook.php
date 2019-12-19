@@ -5,7 +5,9 @@ namespace Ntriga;
 class Facebook
 {
 	private $response_url = '';
-	private $page_key_file = __DIR__.'/../settings/facebook_page_key.json';
+
+	private $settings_dir = __DIR__.'/../settings/';
+	private $page_key_file = null;
 
 	private $app_id = 0;
 	private $app_secret = '';
@@ -18,6 +20,8 @@ class Facebook
 		$this->app_id = $app_id;
 		$this->app_secret = $app_secret;
 		$this->response_url = str_replace($_SERVER['DOCUMENT_ROOT'], '', __DIR__).'/response.php?app_id='.$app_id.'&app_secret='.$app_secret;
+
+		$this->page_key_file = $this->settings_dir.'page_key.json';
 
 		$this->settings = $this->get_settings();
 	}
@@ -51,6 +55,10 @@ class Facebook
 		$long_token = $this->getLongLivedToken($user_token);
 		$permanent_token = $this->getPermanentToken($page_id, $long_token->access_token);
 		$business = $this->getBusinessId($page_id, $permanent_token->access_token);
+
+		if (!is_dir($this->settings_dir)) {
+		  mkdir($this->settings_dir);
+		}
 
 		file_put_contents($this->page_key_file, json_encode(['instagram_business_id' => $business->instagram_business_account->id, 'access_token' => $permanent_token->access_token, 'page_id' => $page_id]));
 
