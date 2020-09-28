@@ -75,7 +75,7 @@ class Facebook
 
 	public function getInstagramFeed(){
 		return $this->request_instagram('media', [
-			'fields' => 'media_url,caption,comments_count,like_count,timestamp,permalink',
+			'fields' => 'media_url,caption,comments_count,like_count,timestamp,permalink,media_type',
 			'limit' => 50
 		]);
 	}
