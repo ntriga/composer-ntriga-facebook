@@ -12,7 +12,7 @@ class Facebook
 	private $app_id = 0;
 	private $app_secret = '';
 
-	private $api_url = 'https://graph.facebook.com/v5.0/';
+	private $api_url = 'https://graph.facebook.com/v8.0/';
 
 	private $settings = null;
 
@@ -48,6 +48,7 @@ class Facebook
 	}
 
 	public function getBusinessId($page_id, $token){
+
 		return json_decode(file_get_contents($this->api_url.$page_id.'?fields=instagram_business_account&access_token='.$token));
 	}
 
@@ -59,7 +60,7 @@ class Facebook
 		if (!is_dir($this->settings_dir)) {
 		  mkdir($this->settings_dir);
 		}
-
+		
 		file_put_contents($this->page_key_file, json_encode(['instagram_business_id' => $business->instagram_business_account->id, 'access_token' => $permanent_token->access_token, 'page_id' => $page_id]));
 
 		return true;
@@ -74,7 +75,7 @@ class Facebook
 
 	public function getInstagramFeed(){
 		return $this->request_instagram('media', [
-			'fields' => 'media_url,caption,comments_count,like_count,media_type,thumbnail_url,timestamp,comments,permalink',
+			'fields' => 'media_url,caption,comments_count,like_count,timestamp,permalink',
 			'limit' => 50
 		]);
 	}

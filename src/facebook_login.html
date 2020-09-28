@@ -139,7 +139,7 @@
       <section class="app-content">
 <div id="fb_login">
   <h2>Login to facebook</h2>
-  <fb:login-button scope="instagram_basic, manage_pages" onlogin="checkLoginState();">
+  <fb:login-button scope="instagram_basic, pages_show_list" onlogin="checkLoginState();">
 </fb:login-button>
 </div>
 
@@ -151,7 +151,7 @@
     <div class="form-group">
       <select class="form-control" id="fb_accounts" name="fb_account"></select>
     </div>
-
+    <fb:login-button scope="instagram_basic, pages_show_list" onlogin="checkLoginState();"></fb:login-button>
     <button type="submit" class="btn btn-primary">Koppelen</button>
   </form>
 </div>
