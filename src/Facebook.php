@@ -12,7 +12,7 @@ class Facebook
 	private $app_id = 0;
 	private $app_secret = '';
 
-	private $api_url = 'https://graph.facebook.com/v8.0/';
+	private $api_url = 'https://graph.facebook.com/v14.0/';
 
 	private $settings = null;
 

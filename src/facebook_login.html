@@ -91,7 +91,7 @@
       cookie     : true,  // enable cookies to allow the server to access 
                           // the session
       xfbml      : true,  // parse social plugins on this page
-      version    : 'v5.0' // use graph api version 2.8
+      version    : 'v14.0' // use graph api version 2.8
     });
 
     // Now that we've initialized the JavaScript SDK, we call 
@@ -139,8 +139,7 @@
       <section class="app-content">
 <div id="fb_login">
   <h2>Login to facebook</h2>
-  <fb:login-button scope="instagram_basic, pages_show_list" onlogin="checkLoginState();">
-</fb:login-button>
+  <div class="fb-login-button" data-width="" data-size="large" data-button-type="login_with" data-layout="default" data-auto-logout-link="false" data-use-continue-as="false" data-scope="instagram_basic, pages_show_list" data-onlogin="checkLoginState();"></div>
 </div>
 
 <div id="choose_account" style="display:none;">
@@ -151,7 +150,6 @@
     <div class="form-group">
       <select class="form-control" id="fb_accounts" name="fb_account"></select>
     </div>
-    <fb:login-button scope="instagram_basic, pages_show_list" onlogin="checkLoginState();"></fb:login-button>
     <button type="submit" class="btn btn-primary">Koppelen</button>
   </form>
 </div>
